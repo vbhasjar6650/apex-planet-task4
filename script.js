@@ -1,0 +1,57 @@
+const taskInput = document.getElementById('taskInput');
+const addTaskBtn = document.getElementById('addTaskBtn');
+const taskList = document.getElementById('taskList');
+const clearAllBtn = document.getElementById('clearAllBtn');
+
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function saveTasks() {
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
+function renderTasks() {
+  taskList.innerHTML = '';
+  tasks.forEach((task, index) => {
+    const li = document.createElement('li');
+    li.className = 'task-item';
+    li.innerHTML = `
+      <span class="${task.done ? 'done' : ''}">${task.text}</span>
+      <div class="task-actions">
+        <button class="complete" data-action="toggle" data-index="${index}">${task.done ? 'Undo' : 'Done'}</button>
+        <button class="remove" data-action="delete" data-index="${index}">Delete</button>
+      </div>
+    `;
+    taskList.appendChild(li);
+  });
+}
+
+function addTask() {
+  const text = taskInput.value.trim();
+  if (!text) return;
+  tasks.unshift({ text, done: false });
+  taskInput.value = '';
+  saveTasks();
+  renderTasks();
+}
+
+function handleListClick(e) {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  const index = Number(btn.dataset.index);
+  const action = btn.dataset.action;
+  if (action === 'delete') tasks.splice(index, 1);
+  if (action === 'toggle') tasks[index].done = !tasks[index].done;
+  saveTasks();
+  renderTasks();
+}
+
+addTaskBtn.addEventListener('click', addTask);
+taskInput.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+taskList.addEventListener('click', handleListClick);
+clearAllBtn.addEventListener('click', () => {
+  tasks = [];
+  saveTasks();
+  renderTasks();
+});
+
+renderTasks();
