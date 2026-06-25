@@ -1,0 +1,26 @@
+const products = [
+  { name: 'Wireless Headphones', category: 'electronics', price: 2999, rating: 4.5, desc: 'Noise-isolating audio with deep bass.' },
+  { name: 'Smart Watch', category: 'electronics', price: 4999, rating: 4.7, desc: 'Track fitness, notifications, and more.' },
+  { name: 'Casual T-Shirt', category: 'fashion', price: 799, rating: 4.2, desc: 'Soft cotton everyday wear.' },
+  { name: 'Denim Jacket', category: 'fashion', price: 1899, rating: 4.4, desc: 'Classic outerwear for all seasons.' },
+  { name: 'Table Lamp', category: 'home', price: 1499, rating: 4.6, desc: 'Modern lamp for bedroom or desk.' },
+  { name: 'Storage Basket', category: 'home', price: 999, rating: 4.1, desc: 'Compact organizer for daily use.' }
+];
+
+const categoryFilter = document.getElementById('categoryFilter');
+const sortSelect = document.getElementById('sortSelect');
+const productGrid = document.getElementById('productGrid');
+
+function displayProducts(items) {
+  productGrid.innerHTML = items.map(product => `
+    <article class="product-card">
+      <span class="badge">${product.category}</span>
+      <h3>${product.name}</h3>
+      <p>${product.desc}</p>
+      <p><strong>Price:</strong> ₹${product.price}</p>
+      <p><strong>Rating:</strong> ⭐ ${product.rating}</p>
+    </article>
+  `).join('');
+}
+
+displayProducts(products);
